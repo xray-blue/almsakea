@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>إمساكية ختم القرآن - مع تلاوات كاملة 30 يوم</title>
+    <style>
+        /* نفس التنسيقات السابقة */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Amiri', 'Tajawal', 'Traditional Arabic', serif;
+        }
+
+        body {
+            background: linear-gradient(145deg, #1e3c2c 0%, #2a5a3a 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 950px;
+            width: 100%;
+            background-color: #fef9e7;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" opacity="0.1"><path d="M20 20 L30 10 L40 20 L50 10 L60 20 L70 10 L80 20 L80 40 L70 30 L60 40 L50 30 L40 40 L30 30 L20 40 Z" fill="%23b8860b"/><circle cx="50" cy="60" r="8" fill="%23b8860b"/></svg>');
+            border-radius: 40px 40px 20px 20px;
+            box-shadow: 0 20px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            border: 3px solid #d4af37;
+            padding: 20px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #0f4e2f, #1b6b3f);
+            color: #ffd966;
+            padding: 20px 10px 30px;
+            border-radius: 0 0 50px 50px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #d4af37;
+            box-shadow: inset 0 -5px 10px rgba(0,0,0,0.3);
+        }
+
+        .header::before, .header::after {
+            content: "﴿اللهم صل على محمد وال محمد﴾";
+            font-size: 30px;
+            color: #e6c300;
+            position: absolute;
+            bottom: -23px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0f4e2f;
+            padding: 5px 30px;
+            border-radius: 30px;
+            border: 2px solid #d4af37;
+            letter-spacing: 10px;
+            white-space: nowrap;
+        }
+
+        .profile-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 0 5px;
+        }
+
+        .profile-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #ffd966;
+            box-shadow: 0 0 0 3px #b8860b;
+            object-fit: cover;
+            background: #f7d44e;
+        }
+
+        .profile-name {
+            font-size: 26px;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 #2c5e2e;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 18px;
+            border-radius: 40px;
+            border: 1px solid #ffd966;
+            min-width: 180px;
+            margin: 5px 0;
+        }
+
+        .title {
+            font-size: 22px;
+            margin-top: 20px;
+            background: #e6c300;
+            color: #1d4e2b;
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 0 #7f6000;
+            border: 1px solid #fff1b8;
+            max-width: 100%;
+            word-break: keep-all;
+        }
+
+        .weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            background: #c9a227;
+            color: #1e3c2c;
+            font-weight: bold;
+            padding: 10px 0;
+            border-radius: 40px;
+            margin: 20px 0 10px;
+            border: 2px solid #f1d270;
+            font-size: 1.1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+            background: #ebd6b0;
+            padding: 15px 10px;
+            border-radius: 30px;
+            border: 2px solid #b68b40;
+            box-shadow: inset 0 0 10px #7a5d2e;
+        }
+
+        .day-card {
+            background: #fff9e6;
+            border-radius: 20px;
+            padding: 8px 3px;
+            text-align: center;
+            font-weight: bold;
+            border: 2px solid #b68b40;
+            box-shadow: 0 4px 0 #8b6b41;
+            transition: 0.2s;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70px;
+        }
+
+        .day-card:hover {
+            background: #ffe18f;
+            transform: scale(0.98);
+        }
+
+        .day-card.selected {
+            background: #dbb058;
+            border: 3px solid #d43f0c;
+            box-shadow: 0 0 0 3px #f7c35c;
+            color: #2d1f00;
+        }
+
+        .day-number {
+            font-size: 1.3rem;
+            line-height: 1.2;
+            color: #1d4e2b;
+        }
+
+        .gregorian-date {
+            font-size: 0.8rem;
+            background: #2f6930;
+            color: #f9e084;
+            padding: 2px 6px;
+            border-radius: 30px;
+            margin-top: 4px;
+            border: 1px solid gold;
+            white-space: nowrap;
+        }
+
+        .reading-info {
+            background: #173e1f;
+            border: 4px solid #f0c45a;
+            border-radius: 40px 40px 20px 20px;
+            margin-top: 25px;
+            padding: 20px 12px;
+            color: #fff1c1;
+            font-size: 1.2rem;
+            text-align: center;
+            box-shadow: inset 0 -5px 0 #7f6000, 0 10px 10px rgba(0,0,0,0.3);
+            line-height: 1.6;
+            min-height: 200px;
+            max-height: 450px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .juz-desc {
+            background: #feda7a;
+            color: #1e5100;
+            padding: 18px 15px;
+            border-radius: 40px;
+            font-weight: bold;
+            border: 3px solid #ad7d2c;
+            width: 100%;
+            text-align: right;
+            direction: rtl;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .audio-player {
+            width: 100%;
+            margin-top: 10px;
+            background: #1a472a;
+            border-radius: 30px;
+            padding: 10px;
+            border: 2px solid #f0c45a;
+        }
+
+        audio {
+            width: 100%;
+            border-radius: 30px;
+            outline: none;
+        }
+
+        .audio-error {
+            color: #ffb3b3;
+            background: #8b0000;
+            padding: 5px 10px;
+            border-radius: 30px;
+            margin-top: 5px;
+            font-size: 0.9rem;
+            border: 1px solid #ffc0c0;
+        }
+
+        .footer-note {
+            margin-top: 20px;
+            text-align: center;
+            color: #f5e6b3;
+            font-size: 1rem;
+            text-shadow: 1px 1px 0 #2d5720;
+        }
+
+        @media (max-width: 500px) {
+            .profile-image {
+                width: 60px;
+                height: 60px;
+            }
+            .profile-name {
+                font-size: 20px;
+                padding: 5px 12px;
+            }
+            .title {
+                font-size: 18px;
+                padding: 8px 15px;
+            }
+            .day-number {
+                font-size: 1rem;
+            }
+            .gregorian-date {
+                font-size: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="profile-container">
+                <img src="right.jpg" alt="صورة يمنى" class="profile-image" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'40\' fill=\'%23b8860b\'/%3E%3Ctext x=\'40\' y=\'50\' font-size=\'40\' text-anchor=\'middle\' fill=\'%23ffd966\' dy=\'.3em\'%3E🕊️%3C/text%3E%3C/svg%3E';">
+                <div class="profile-name">المرحوم / المرحومة<br>مجر حميدي حسن / هاشميه جباره حسن</div>
+                <img src="left.jpg" alt="صورة يسرى" class="profile-image" onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'80\' height=\'80\' viewBox=\'0 0 80 80\'%3E%3Ccircle cx=\'40\' cy=\'40\' r=\'40\' fill=\'%23b8860b\'/%3E%3Ctext x=\'40\' y=\'50\' font-size=\'40\' text-anchor=\'middle\' fill=\'%23ffd966\' dy=\'.3em\'%3E🌿%3C/text%3E%3C/svg%3E';">
+            </div>
+            <div class="title">الختمة السنوية للقرآن الكريم على روحها الطاهر</div>
+        </div>
+
+        <div class="weekdays">
+            <div>الخميس</div>
+            <div>الجمعة</div>
+            <div>السبت</div>
+            <div>الأحد</div>
+            <div>الاثنين</div>
+            <div>الثلاثاء</div>
+            <div>الأربعاء</div>
+        </div>
+
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="reading-info" id="readingInfo">
+            <div id="juzText" class="juz-desc">اضغط على أي يوم لمعرفة السور المطلوبة</div>
+            <div class="audio-player" id="audioPlayerContainer" style="display: none;">
+                <audio id="audioPlayer" controls preload="none">
+                    <source src="" type="audio/mpeg">
+                    المتصفح لا يدعم تشغيل الصوت.
+                </audio>
+                <div id="audioErrorMessage" class="audio-error" style="display: none;"></div>
+            </div>
+        </div>
+        <div class="footer-note">📍 آخر يوم تقرأ فيه محفوظ تلقائياً</div>
+    </div>
+
+    <script>
+        (function() {
+            // بيانات السور (كما هي)
+            const juzDetails = [
+                { juz: 1, desc: "📖 اليوم الأول:\n• سورة الفاتحة كاملة (7 آيات)\n• سورة البقرة من الآية 1 إلى الآية 141" },
+                { juz: 2, desc: "📖 اليوم الثاني:\n• سورة البقرة من الآية 142 إلى الآية 252" },
+                { juz: 3, desc: "📖 اليوم الثالث:\n• سورة البقرة من الآية 253 إلى الآية 286 (نهاية السورة)\n• سورة آل عمران من الآية 1 إلى الآية 91" },
+                { juz: 4, desc: "📖 اليوم الرابع:\n• سورة آل عمران من الآية 92 إلى الآية 200 (نهاية السورة)\n• سورة النساء من الآية 1 إلى الآية 23" },
+                { juz: 5, desc: "📖 اليوم الخامس:\n• سورة النساء من الآية 24 إلى الآية 147" },
+                { juz: 6, desc: "📖 اليوم السادس:\n• سورة النساء من الآية 148 إلى الآية 176 (نهاية السورة)\n• سورة المائدة من الآية 1 إلى الآية 81" },
+                { juz: 7, desc: "📖 اليوم السابع:\n• سورة المائدة من الآية 82 إلى الآية 120 (نهاية السورة)\n• سورة الأنعام من الآية 1 إلى الآية 110" },
+                { juz: 8, desc: "📖 اليوم الثامن:\n• سورة الأنعام من الآية 111 إلى الآية 165 (نهاية السورة)\n• سورة الأعراف من الآية 1 إلى الآية 87" },
+                { juz: 9, desc: "📖 اليوم التاسع:\n• سورة الأعراف من الآية 88 إلى الآية 206 (نهاية السورة)\n• سورة الأنفال من الآية 1 إلى الآية 40" },
+                { juz: 10, desc: "📖 اليوم العاشر:\n• سورة الأنفال من الآية 41 إلى الآية 75 (نهاية السورة)\n• سورة التوبة من الآية 1 إلى الآية 92" },
+                { juz: 11, desc: "📖 اليوم الحادي عشر:\n• سورة التوبة من الآية 93 إلى الآية 129 (نهاية السورة)\n• سورة يونس كاملة (109 آيات)\n• سورة هود من الآية 1 إلى الآية 5" },
+                { juz: 12, desc: "📖 اليوم الثاني عشر:\n• سورة هود من الآية 6 إلى الآية 123 (نهاية السورة)\n• سورة يوسف من الآية 1 إلى الآية 52" },
+                { juz: 13, desc: "📖 اليوم الثالث عشر:\n• سورة يوسف من الآية 53 إلى الآية 111 (نهاية السورة)\n• سورة الرعد كاملة (43 آية)\n• سورة إبراهيم من الآية 1 إلى الآية 52 (نهاية السورة)" },
+                { juz: 14, desc: "📖 اليوم الرابع عشر:\n• سورة الحجر كاملة (99 آية)\n• سورة النحل من الآية 1 إلى الآية 128 (نهاية السورة)" },
+                { juz: 15, desc: "📖 اليوم الخامس عشر:\n• سورة الإسراء من الآية 1 إلى الآية 111 (نهاية السورة)\n• سورة الكهف من الآية 1 إلى الآية 74" },
+                { juz: 16, desc: "📖 اليوم السادس عشر:\n• سورة الكهف من الآية 75 إلى الآية 110 (نهاية السورة)\n• سورة مريم كاملة (98 آية)\n• سورة طه من الآية 1 إلى الآية 135 (نهاية السورة)" },
+                { juz: 17, desc: "📖 اليوم السابع عشر:\n• سورة الأنبياء كاملة (112 آية)\n• سورة الحج من الآية 1 إلى الآية 78 (نهاية السورة)" },
+                { juz: 18, desc: "📖 اليوم الثامن عشر:\n• سورة المؤمنون كاملة (118 آية)\n• سورة النور من الآية 1 إلى الآية 64 (نهاية السورة)\n• سورة الفرقان من الآية 1 إلى الآية 20" },
+                { juz: 19, desc: "📖 اليوم التاسع عشر:\n• سورة الفرقان من الآية 21 إلى الآية 77 (نهاية السورة)\n• سورة الشعراء من الآية 1 إلى الآية 227 (نهاية السورة)\n• سورة النمل من الآية 1 إلى الآية 55" },
+                { juz: 20, desc: "📖 اليوم العشرون:\n• سورة النمل من الآية 56 إلى الآية 93 (نهاية السورة)\n• سورة القصص كاملة (88 آية)\n• سورة العنكبوت من الآية 1 إلى الآية 45" },
+                { juz: 21, desc: "📖 اليوم الحادي والعشرون:\n• سورة العنكبوت من الآية 46 إلى الآية 69 (نهاية السورة)\n• سورة الروم كاملة (60 آية)\n• سورة لقمان كاملة (34 آية)\n• سورة السجدة كاملة (30 آية)\n• سورة الأحزاب من الآية 1 إلى الآية 30" },
+                { juz: 22, desc: "📖 اليوم الثاني والعشرون:\n• سورة الأحزاب من الآية 31 إلى الآية 73 (نهاية السورة)\n• سورة سبأ كاملة (54 آية)\n• سورة فاطر كاملة (45 آية)\n• سورة يس من الآية 1 إلى الآية 27" },
+                { juz: 23, desc: "📖 اليوم الثالث والعشرون:\n• سورة يس من الآية 28 إلى الآية 83 (نهاية السورة)\n• سورة الصافات كاملة (182 آية)\n• سورة ص كاملة (88 آية)\n• سورة الزمر من الآية 1 إلى الآية 31" },
+                { juz: 24, desc: "📖 اليوم الرابع والعشرون:\n• سورة الزمر من الآية 32 إلى الآية 75 (نهاية السورة)\n• سورة غافر من الآية 1 إلى الآية 77 (نهاية السورة)\n• سورة فصلت من الآية 1 إلى الآية 46" },
+                { juz: 25, desc: "📖 اليوم الخامس والعشرون:\n• سورة فصلت من الآية 47 إلى الآية 54 (نهاية السورة)\n• سورة الشورى كاملة (53 آية)\n• سورة الزخرف كاملة (89 آية)\n• سورة الدخان كاملة (59 آية)\n• سورة الجاثية من الآية 1 إلى الآية 37 (نهاية السورة)" },
+                { juz: 26, desc: "📖 اليوم السادس والعشرون:\n• سورة الأحقاف كاملة (35 آية)\n• سورة محمد كاملة (38 آية)\n• سورة الفتح كاملة (29 آية)\n• سورة الحجرات كاملة (18 آية)\n• سورة ق كاملة (45 آية)\n• سورة الذاريات من الآية 1 إلى الآية 30" },
+                { juz: 27, desc: "📖 اليوم السابع والعشرون:\n• سورة الذاريات من الآية 31 إلى الآية 60 (نهاية السورة)\n• سورة الطور كاملة (49 آية)\n• سورة النجم كاملة (62 آية)\n• سورة القمر كاملة (55 آية)\n• سورة الرحمن كاملة (78 آية)\n• سورة الواقعة كاملة (96 آية)\n• سورة الحديد من الآية 1 إلى الآية 29 (نهاية السورة)" },
+                { juz: 28, desc: "📖 اليوم الثامن والعشرون:\n• سورة المجادلة كاملة (22 آية)\n• سورة الحشر كاملة (24 آية)\n• سورة الممتحنة كاملة (13 آية)\n• سورة الصف كاملة (14 آية)\n• سورة الجمعة كاملة (11 آية)\n• سورة المنافقون كاملة (11 آية)\n• سورة التغابن كاملة (18 آية)\n• سورة الطلاق كاملة (12 آية)\n• سورة التحريم كاملة (12 آية)" },
+                { juz: 29, desc: "📖 اليوم التاسع والعشرون:\n• سورة الملك كاملة (30 آية)\n• سورة القلم كاملة (52 آية)\n• سورة الحاقة كاملة (52 آية)\n• سورة المعارج كاملة (44 آية)\n• سورة نوح كاملة (28 آية)\n• سورة الجن كاملة (28 آية)\n• سورة المزمل كاملة (20 آية)\n• سورة المدثر كاملة (56 آية)\n• سورة القيامة كاملة (40 آية)\n• سورة الإنسان كاملة (31 آية)\n• سورة المرسلات كاملة (50 آية)" },
+                { juz: 30, desc: "📖 اليوم الثلاثون:\n• سورة النبأ كاملة (40 آية)\n• سورة النازعات كاملة (46 آية)\n• سورة عبس كاملة (42 آية)\n• سورة التكوير كاملة (29 آية)\n• سورة الانفطار كاملة (19 آية)\n• سورة المطففين كاملة (36 آية)\n• سورة الانشقاق كاملة (25 آية)\n• سورة البروج كاملة (22 آية)\n• سورة الطارق كاملة (17 آية)\n• سورة الأعلى كاملة (19 آية)\n• سورة الغاشية كاملة (26 آية)\n• سورة الفجر كاملة (30 آية)\n• سورة البلد كاملة (20 آية)\n• سورة الشمس كاملة (15 آية)\n• سورة الليل كاملة (21 آية)\n• سورة الضحى كاملة (11 آية)\n• سورة الشرح كاملة (8 آيات)\n• سورة التين كاملة (8 آيات)\n• سورة العلق كاملة (19 آية)\n• سورة القدر كاملة (5 آيات)\n• سورة البينة كاملة (8 آيات)\n• سورة الزلزلة كاملة (8 آيات)\n• سورة العاديات كاملة (11 آية)\n• سورة القارعة كاملة (11 آية)\n• سورة التكاثر كاملة (8 آيات)\n• سورة العصر كاملة (3 آيات)\n• سورة الهمزة كاملة (9 آيات)\n• سورة الفيل كاملة (5 آيات)\n• سورة قريش كاملة (4 آيات)\n• سورة الماعون كاملة (7 آيات)\n• سورة الكوثر كاملة (3 آيات)\n• سورة الكافرون كاملة (6 آيات)\n• سورة النصر كاملة (3 آيات)\n• سورة المسد كاملة (5 آيات)\n• سورة الإخلاص كاملة (4 آيات)\n• سورة الفلق كاملة (5 آيات)\n• سورة الناس كاملة (6 آيات)" }
+            ];
+
+            // ==================== روابط التلاوات كاملة 30 يوم ====================
+            const audioFiles = [
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/1.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/2.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/3.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/4.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/5.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/6.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/7.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/8.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/9.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/10.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/11.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/12.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/13.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/14.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/15.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/16.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/17.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/18.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/19.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/20.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/21.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/22.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/23.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/24.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/25.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/26.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/27.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/28.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/29.mp3",
+                "https://download.quranicaudio.com/qdc/mishari_al_afasy/murattal/30.mp3"
+            ];
+
+            // ==================== إعداد التواريخ ====================
+            const startDate = new Date(2026, 1, 19); // 19 فبراير 2026
+            const totalDays = 30;
+            const dates = [];
+
+            for (let i = 0; i < totalDays; i++) {
+                let current = new Date(startDate);
+                current.setDate(startDate.getDate() + i);
+                dates.push({
+                    dayOfMonth: current.getDate(),
+                    month: current.getMonth() + 1,
+                    index: i
+                });
+            }
+
+            // ==================== عناصر الصفحة ====================
+            const grid = document.getElementById('calendarGrid');
+            const juzTextDiv = document.getElementById('juzText');
+            const audioPlayerContainer = document.getElementById('audioPlayerContainer');
+            const audioPlayer = document.getElementById('audioPlayer');
+            const audioErrorMessage = document.getElementById('audioErrorMessage');
+
+            const STORAGE_KEY = 'lastReadDayIndex';
+            let lastReadIndex = localStorage.getItem(STORAGE_KEY);
+            if (lastReadIndex !== null) {
+                lastReadIndex = parseInt(lastReadIndex, 10);
+                if (isNaN(lastReadIndex) || lastReadIndex < 0 || lastReadIndex >= totalDays) lastReadIndex = null;
+            }
+
+            function showAudioError(message) {
+                audioErrorMessage.textContent = message;
+                audioErrorMessage.style.display = 'block';
+            }
+
+            function hideAudioError() {
+                audioErrorMessage.style.display = 'none';
+            }
+
+            function updateReadingInfo(index) {
+                if (index >= 0 && index < totalDays) {
+                    const juz = juzDetails[index];
+                    const formattedDesc = juz.desc.replace(/\n/g, '<br>');
+                    juzTextDiv.innerHTML = formattedDesc;
+
+                    // تحديث مصدر الصوت
+                    if (audioFiles[index]) {
+                        audioPlayer.onerror = null;
+                        audioPlayer.src = audioFiles[index];
+                        audioPlayer.load();
+                        audioPlayerContainer.style.display = 'block';
+                        hideAudioError();
+
+                        audioPlayer.onerror = function() {
+                            console.warn('فشل تحميل التلاوة:', audioFiles[index]);
+                            showAudioError('⚠️ لا يمكن تحميل التلاوة. تحقق من اتصالك بالإنترنت.');
+                        };
+                    } else {
+                        audioPlayerContainer.style.display = 'none';
+                    }
+
+                    localStorage.setItem(STORAGE_KEY, index);
+                } else {
+                    juzTextDiv.innerHTML = 'اضغط على أي يوم لمعرفة السور المطلوبة';
+                    audioPlayerContainer.style.display = 'none';
+                }
+            }
+
+            // بناء شبكة الأيام
+            dates.forEach((date, idx) => {
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+                if (lastReadIndex === idx) dayCard.classList.add('selected');
+
+                dayCard.innerHTML = `
+                    <span class="day-number">اليوم ${idx+1}</span>
+                    <span class="gregorian-date">${date.dayOfMonth} / ${date.month}</span>
+                `;
+
+                dayCard.addEventListener('click', function() {
+                    document.querySelectorAll('.day-card').forEach(card => card.classList.remove('selected'));
+                    dayCard.classList.add('selected');
+                    updateReadingInfo(idx);
+                });
+
+                grid.appendChild(dayCard);
+            });
+
+            if (lastReadIndex !== null) {
+                updateReadingInfo(lastReadIndex);
+            } else {
+                juzTextDiv.innerHTML = 'اضغط على أي يوم لمعرفة السور المطلوبة';
+                audioPlayerContainer.style.display = 'none';
+            }
+        })();
+    </script>
+</body>
+</html>
